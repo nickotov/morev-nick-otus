@@ -1,9 +1,3 @@
-/**
- * Task: Написать утилиту tree для удобного показа структуры файлов директории.
-Утилита должна принимать на вход обязательный аргумент — путь до директории для показа ее структуры.
-Также она должна понимать опцию глубину показа --depth, -d с числом в качестве значения.
-Example: node tree Node.js -d 2
- */
 import fs from 'node:fs/promises'
 
 const MAX_DEPTH_FROM_ENV = Number(process.env.MAX_DEPTH)
@@ -31,35 +25,52 @@ export const tree = async (params: { path: string, maxDepth: number } = getParam
         return
     }
 
-    await traverse(path, 0)
+    printLine(path.split('/').pop() || 'UNKNOWN', 0, [])
 
-    async function traverse(path: string, depth: number, isLastParent: boolean = false) {
+    await traverse(path, 1)
+
+    printTreeStats(directories, files)
+
+    async function traverse(path: string, depth: number = 0, prefixes: string[] = []) {
         const children = await getChildren(path)
         const lastIndex = children.length - 1
 
         for (let i = 0; i < children.length; i++) {
             const child = children[i]
             const childPath = `${path}/${child}`
-            const name = child.split('/').pop()
-
-            if (!name) {
-                throw new Error('Child name is not valid')
-            }
 
             const isParent = await checkIsParent(childPath)
-            const isLast = i === lastIndex
+            const isLastChild = i === lastIndex
 
-            printLine(name, depth, isLast)
+            if (isParent) {
+                directories++
+            } else {
+                files++
+            }
 
-            const newDepth = depth + 1
+            const newPrefixes = [...prefixes]
 
-            if (newDepth >= maxDepth) {
+            if (isLastChild) {
+                newPrefixes.push('└── ')
+            } else {
+                newPrefixes.push('├── ')
+            }
+
+            printLine(child, depth, newPrefixes)
+
+            if (depth >= maxDepth || !isParent) {
                 continue
             }
 
-            if (isParent) {
-                await traverse(childPath, newDepth, isLast)
+            const nextPrefixes = [...prefixes]
+
+            if (isLastChild) {
+                nextPrefixes.push('    ')
+            } else {
+                nextPrefixes.push('│   ')
             }
+
+            await traverse(childPath, depth + 1, nextPrefixes)
         }
     }
 }
@@ -83,10 +94,10 @@ async function checkIsChild(path: string) {
     return stats.isFile()
 }
 
-function printLine(text: string, depth: number, isLast: boolean) {
+function printLine(text: string, depth: number, prefixes: string[]) {
     const prefix = depth === 0
         ? ''
-        : '│   '.repeat(depth - 1) + (isLast ? '└── ' : '├── ')
+        : prefixes.join('')
     console.log(prefix + text)
 }
 
