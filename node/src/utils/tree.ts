@@ -106,6 +106,12 @@ async function getChildren(path: string) {
 }
 
 function printTreeStats(numberOfFolders: number, numberOfFiles: number) {
-    console.log(`Total folders: ${numberOfFolders}`)
-    console.log(`Total files: ${numberOfFiles}`)
+    console.log('\n')
+    report(`Total folders: ${numberOfFolders}`)
+    report(`Total files: ${numberOfFiles}`)
+}
+
+
+function report(message: string) {
+    console.log('\x1b[1m\x1b[37m\x1b[40m%s\x1b[0m', `  ${message}  `)
 }
