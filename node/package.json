@@ -7,10 +7,11 @@
     "start": "tsc && node dist/index.js",
     "dev": "nodemon",
     "dev:debug": "nodemon --config nodemon.debug.json",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json && tsc-alias",
     "watch": "tsc -w",
     "format": "prettier --write \"src/**/*.{js,ts,json}\"",
-    "format:check": "prettier --check \"src/**/*.{js,ts,json}\""
+    "format:check": "prettier --check \"src/**/*.{js,ts,json}\"",
+    "node-1": "tsx src/lessons/lesson-1.ts && node dist/lessons/lesson-1.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "@types/node": "^22.13.14",
     "nodemon": "^3.1.0",
     "prettier": "^3.2.5",
+    "tsc-alias": "^1.8.13",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
