@@ -10,8 +10,8 @@
     "dev:debug": "nodemon --config nodemon.debug.json",
     "build": "tsc",
     "watch": "tsc -w",
-    "format": "prettier --write \"src/**/*.{js,ts}\"",
-    "format:check": "prettier --check \"src/**/*.{js,ts}\""
+    "format": "prettier --write \"src/**/*.{js,ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,json}\""
   },
   "keywords": [],
   "author": "",
