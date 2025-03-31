@@ -1,3 +1,8 @@
-const greeting: string = 'Hello, world!'
+import { tree } from './utils/tree.js';
 
-console.log(greeting)
+function main() {
+    tree({path: '/Users/nickkotov/projects/node-js-course/otus/node/.test', maxDepth: 5})
+}
+
+main();
+
