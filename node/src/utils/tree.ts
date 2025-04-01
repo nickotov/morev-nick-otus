@@ -1,6 +1,8 @@
 import fs from 'node:fs/promises'
 import nodePath from 'node:path'
 
+// DISCLAIMER: if not a course, i'd probably use directory-tree package
+
 interface TreeParams {
     path: string
     maxDepth: number
@@ -29,7 +31,7 @@ export const tree = async (params: TreeParams = getTreeParams()) => {
         return
     }
 
-    printLine(nodePath.basename(path), 0, [])
+    printLine({ text: nodePath.basename(path), depth: 0, prefixes: [] })
 
     await traverse(path, 1)
 
@@ -46,35 +48,39 @@ export const tree = async (params: TreeParams = getTreeParams()) => {
             const isParent = await checkIsParent(childPath)
             const isLastChild = i === lastIndex
 
+            // Counting files and directories for stats
             if (isParent) {
                 directories++
             } else {
                 files++
             }
 
-            const newPrefixes = [...prefixes]
+            const extendedPrefixes = [...prefixes]
 
             if (isLastChild) {
-                newPrefixes.push('└── ')
+                extendedPrefixes.push('└── ')
             } else {
-                newPrefixes.push('├── ')
+                extendedPrefixes.push('├── ')
             }
 
-            printLine(child, depth, newPrefixes)
+            printLine({ text: child, depth, prefixes: extendedPrefixes })
 
-            if (depth >= maxDepth || !isParent) {
+            if (
+                depth >= maxDepth ||
+                !isParent // only parents can be traversed
+            ) {
                 continue
             }
 
-            const nextPrefixes = [...prefixes]
+            const newLinePrefixes = [...prefixes]
 
             if (isLastChild) {
-                nextPrefixes.push('    ')
+                newLinePrefixes.push('    ')
             } else {
-                nextPrefixes.push('│   ')
+                newLinePrefixes.push('│   ')
             }
 
-            await traverse(childPath, depth + 1, nextPrefixes)
+            await traverse(childPath, depth + 1, newLinePrefixes)
         }
     }
 }
@@ -124,7 +130,7 @@ async function checkIsChild(path: string) {
     return stats.isFile()
 }
 
-function printLine(text: string, depth: number, prefixes: string[]) {
+function printLine({ text, depth, prefixes }: { text: string, depth: number, prefixes: string[] }) {
     const prefix = depth === 0
         ? ''
         : prefixes.join('')
