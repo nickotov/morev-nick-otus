@@ -1,3 +1,4 @@
+import path from 'node:path'
 import { tree } from '@/utils/tree'
 
-tree({path: '/Users/nickkotov/projects/node-js-course/otus/node/src', maxDepth: 1})
+tree({ path:path.join(process.cwd(), 'src') })

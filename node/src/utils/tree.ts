@@ -5,13 +5,13 @@ import nodePath from 'node:path'
 
 interface TreeParams {
     path: string
-    maxDepth: number
+    maxDepth?: number
 }
 
 const DEFAULT_MAX_DEPTH = 100
 
 export const tree = async (params: TreeParams = getTreeParams()) => {
-    const { path, maxDepth } = params
+    const { path, maxDepth = DEFAULT_MAX_DEPTH } = params
 
     if (!path) {
         throw new Error('Path is required')
