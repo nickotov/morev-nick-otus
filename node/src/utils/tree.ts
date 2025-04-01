@@ -1,10 +1,14 @@
 import fs from 'node:fs/promises'
+import nodePath from 'node:path'
 
-const MAX_DEPTH_FROM_ENV = Number(process.env.MAX_DEPTH)
+interface TreeParams {
+    path: string
+    maxDepth: number
+}
 
-const MAX_DEPTH = MAX_DEPTH_FROM_ENV ? MAX_DEPTH_FROM_ENV : 100
+const DEFAULT_MAX_DEPTH = 100
 
-export const tree = async (params: { path: string, maxDepth: number } = getParamsFromCLI()) => {
+export const tree = async (params: TreeParams = getTreeParams()) => {
     const { path, maxDepth } = params
 
     if (!path) {
@@ -25,7 +29,7 @@ export const tree = async (params: { path: string, maxDepth: number } = getParam
         return
     }
 
-    printLine(path.split('/').pop() || 'UNKNOWN', 0, [])
+    printLine(nodePath.basename(path), 0, [])
 
     await traverse(path, 1)
 
@@ -37,7 +41,7 @@ export const tree = async (params: { path: string, maxDepth: number } = getParam
 
         for (let i = 0; i < children.length; i++) {
             const child = children[i]
-            const childPath = `${path}/${child}`
+            const childPath = `${path}${nodePath.sep}${child}`
 
             const isParent = await checkIsParent(childPath)
             const isLastChild = i === lastIndex
@@ -75,13 +79,39 @@ export const tree = async (params: { path: string, maxDepth: number } = getParam
     }
 }
 
-function getParamsFromCLI() {
+function getParamsFromCLI(): TreeParams {
     const args = process.argv.slice(2)
     const path = args[0]
 
-    const maxDepth = ['-d', '--depth'].includes(args[1]) && +args[2] ? +args[2] : MAX_DEPTH
+    let maxDepth = ['-d', '--depth'].includes(args[1]) && args[2] && Number(args[2])
+
+    if (!maxDepth) {
+        maxDepth = DEFAULT_MAX_DEPTH
+    }
 
     return { path, maxDepth }
+}
+
+function getParamsFromEnv(): Partial<TreeParams> {
+    const path = process.env.TREE_ROOT
+
+    let maxDepth = Number(process.env.TREE_MAX_DEPTH)
+
+    if (Number.isNaN(maxDepth)) {
+        maxDepth = DEFAULT_MAX_DEPTH
+    }
+
+    return { path, maxDepth }
+}
+
+function getTreeParams() {
+    const paramsFromCli = getParamsFromCLI()
+    const paramsFromEnv = getParamsFromEnv()
+
+    return {
+        ...paramsFromEnv,
+        ...paramsFromCli,
+    }
 }
 
 async function checkIsParent(path: string) {
