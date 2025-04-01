@@ -11,7 +11,7 @@
     "watch": "tsc -w",
     "format": "prettier --write \"src/**/*.{js,ts,json}\"",
     "format:check": "prettier --check \"src/**/*.{js,ts,json}\"",
-    "node-1": "tsx src/lessons/lesson-1.ts && node dist/lessons/lesson-1.js"
+    "lesson-1": "npm run build && node dist/lessons/lesson-1.js"
   },
   "keywords": [],
   "author": "",
