@@ -1,80 +1,92 @@
-# Node.js Course Homeworks
+# Node.js Course Implementation
 
-This repository contains the homework assignments and related code for the Node.js course.
+This directory contains the implementation of homework assignments for the Node.js course.
 
-## Repository Structure
+## Project Setup
+
+This project is built with TypeScript and includes various utilities and examples from the course lessons.
+
+### Project Structure
 
 ```
-otus/
-├── node/                  # Main project directory
-    ├── src/               # Source code
-        ├── lessons/       # Lesson-specific code and homework examples
-        ├── utils/         # Utility functions
-        └── index.ts       # Main entry point
+node/
+├── src/
+│   ├── lessons/           # Contains code examples and homework implementations for each lesson
+│   │   └── lesson-1.ts    # Homework for Lesson 1 - File system tree display
+│   ├── utils/             # Utility functions used across lessons
+│   │   └── tree.ts        # Tree utility to display directory structure
+│   └── index.ts           # Main entry point
+├── package.json           # Project dependencies and scripts
+└── tsconfig.json          # TypeScript configuration
 ```
 
-## Getting Started
+## Installation
 
-### Prerequisites
-
-- Node.js (v22 or higher recommended, look at .nvmrc)
-- npm
-
-### Installation
-
-1. Clone the repository
-2. Navigate to the project directory
 ```bash
-cd otus/node
-```
-3. Install dependencies
-```bash
-npm ci
+# Install dependencies
+npm install
 ```
 
-## Running Homework Assignments
+## Running Lessons
 
-Each lesson has a corresponding homework assignment located in the `src/lessons` directory. You can run them using the npm scripts defined in `package.json`.
+Each lesson's homework is accessible through npm scripts defined in `package.json`.
 
-### Lesson 1: File System Tree Generator
+### Lesson 1: File System Tree
 
-The first homework assignment implements a function that displays the directory tree structure in the console.
+The first lesson's homework implements a directory structure visualization tool.
 
-To run Lesson 1 homework:
+To run:
 
 ```bash
 npm run lesson-1
 ```
 
-This command builds the TypeScript code and executes the `dist/lessons/lesson-1.js` file, which demonstrates the tree structure functionality.
+This runs the example in `src/lessons/lesson-1.ts` which uses the `tree` utility to display the structure of the `src` directory.
 
-#### About the Tree Function
+#### Tree Utility Options
 
-The tree function is implemented in `src/utils/tree.ts` and can:
-- Display a directory structure in a visual tree format
-- Accept parameters for path and maximum depth
-- Count and report the total number of folders and files
+The tree utility (`src/utils/tree.ts`) can be configured with the following options:
 
-Example output:
+- `path` (required): The directory path to display
+- `maxDepth` (optional): Maximum depth of subdirectories to display (default: 100)
+
+You can use it in your code:
+
+```typescript
+import { tree } from '@/utils/tree';
+
+// Display tree for current directory
+tree({ path: process.cwd() });
+
+// Display tree with limited depth
+tree({ path: './some/directory', maxDepth: 2 });
 ```
-src
-├── lessons
-│   └── lesson-1.ts
-├── utils
-│   └── tree.ts
-└── index.ts
 
-
-  Total folders: 2  
-  Total files: 3  
+You can also use it from the command line with parameters:
 ```
+node dist/utils/tree.js /path/to/directory -d 3
+```
+
+Or set environment variables:
+```
+TREE_ROOT=/path/to/directory TREE_MAX_DEPTH=3 node dist/utils/tree.js
+```
+
+## Development Commands
+
+- `npm run build`: Compile TypeScript files
+- `npm run dev`: Run with nodemon for development
+- `npm run watch`: Watch for file changes
+- `npm run format`: Format code with Prettier
 
 ## Adding New Lessons
 
-As the course progresses, new lessons will be added to the `src/lessons` directory with corresponding scripts in `package.json` to run them.
+As the course progresses, new lesson files will be added to the `src/lessons` directory with corresponding npm scripts to run them.
 
-## Development
+When adding a new lesson:
 
-- Build the project: `npm run build`
-- Run in development mode with auto-reload: `npm run dev`
-- Format code: `npm run format`
+1. Create a new file in `src/lessons/` (e.g., `lesson-2.ts`)
+2. Add a script to `package.json`:
+```
+"lesson-2": "npm run build && node dist/lessons/lesson-2.js"
+```
