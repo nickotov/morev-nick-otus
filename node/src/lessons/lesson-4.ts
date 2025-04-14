@@ -8,9 +8,6 @@ function reader(path: string) {
 }
 
 function writer(path: string) {
-    if (!fs.existsSync(path)) {
-        fs.writeFileSync(path, '')
-    }
     return fs.createWriteStream(path, { encoding: 'utf-8' })
 }
 
