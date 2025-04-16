@@ -2,6 +2,7 @@ import { promisify } from 'node:util'
 import { Transform, pipeline } from 'node:stream'
 import readline from 'node:readline'
 import fs from 'node:fs'
+import { log } from '@/utils/logger'
 
 const pipelineAsync = promisify(pipeline)
 
@@ -16,13 +17,19 @@ export class TextVectorization {
     public async vectorize() {
         const outputFile = this.outputFile
 
-        await pipelineAsync(
-            this.readerByLine(),
-            this.textCleaner(),
-            this.wordsCounter(),
-        )
+        try {
+            await pipelineAsync(
+                this.readerByLine(),
+                this.textCleaner(),
+                this.wordsCounter(),
+            )
 
-        this.writerStream(outputFile, this.objectToVector())
+            this.writerStream(outputFile, this.objectToVector())
+
+            log('Pipeline succeeded', 'success')
+        } catch (error) {
+            log('Pipeline failed', 'error')
+        }
     }
 
     private readerByLine() {
@@ -68,6 +75,13 @@ export class TextVectorization {
     }
 
     private objectToVector() {
-        return Object.entries(this.wordsCounterObject).sort((a, b) => a[0].localeCompare(b[0])).map(([_, count]) => count)
+        const sortedEntries = Object
+            .entries(this.wordsCounterObject)
+            .sort((a, b) => a[0].localeCompare(b[0]))
+
+        console.log('\x1b[1;97;43m [sorted entries] \x1b[0m', sortedEntries)
+        console.log('\x1b[1;97;43m [total entries] \x1b[0m', sortedEntries.length)
+
+        return sortedEntries.map(([_, count]) => count)
     }
 }
