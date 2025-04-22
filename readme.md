@@ -12,9 +12,11 @@ This project is built with TypeScript and includes various utilities and example
 node/
 ├── src/
 │   ├── lessons/           # Contains code examples and homework implementations for each lesson
-│   │   └── lesson-1.ts    # Homework for Lesson 1 - File system tree display
+│   │   ├── lesson-1.ts    # Homework for Lesson 1 - File system tree display
+│   │   └── lesson-4.ts    # Homework for Lesson 4 - Text processing with Node.js streams
 │   ├── utils/             # Utility functions used across lessons
-│   │   └── tree.ts        # Tree utility to display directory structure
+│   │   ├── tree.ts        # Tree utility to display directory structure
+│   │   └── text-vectorizer.ts # Text processing and vectorization utility
 │   └── index.ts           # Main entry point
 ├── package.json           # Project dependencies and scripts
 └── tsconfig.json          # TypeScript configuration
@@ -71,6 +73,51 @@ Or set environment variables:
 ```
 TREE_ROOT=/path/to/directory TREE_MAX_DEPTH=3 node dist/utils/tree.js
 ```
+
+### Lesson 4: Text Processing with Node.js Streams
+
+The fourth lesson's homework implements a text processing pipeline using Node.js streams to:
+1. Read text from an input file
+2. Split into words and filter out non-alphanumeric characters
+3. Count word occurrences 
+4. Transform the counts into a sorted vector
+5. Output the result to a file
+
+To run:
+
+```bash
+npm run lesson-4
+```
+
+This script expects two environment variables:
+- `INPUT_FILE`: Path to the input text file
+- `OUTPUT_FILE`: Path where the processed output will be saved
+
+The script in `package.json` is configured to use sample data:
+```
+"lesson-4": "npm run build && INPUT_FILE=data/lesson-4-text OUTPUT_FILE=dist/data/lesson-4-output node dist/lessons/lesson-4.js"
+```
+
+#### Text Vectorizer Utility
+
+The text vectorizer utility (`src/utils/text-vectorizer.ts`) provides a class for processing text files and converting them to numerical vectors:
+
+```typescript
+import { TextVectorization } from '@/utils/text-vectorizer';
+
+// Create a new vectorizer with input and output files
+const vectorizer = new TextVectorization('input.txt', 'output.json');
+
+// Process the text file and output the result
+await vectorizer.vectorize();
+```
+
+The vectorizer:
+- Reads text line by line from the input file
+- Cleans text by removing special characters and converting to lowercase
+- Counts word occurrences
+- Converts word counts to a sorted numerical vector
+- Writes the resulting vector to the output file
 
 ## Development Commands
 
