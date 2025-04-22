@@ -16,7 +16,7 @@
     "test": "jest --config jest.config.js",
     "test:watch": "jest --config jest.config.js --watch",
     "test:coverage": "jest --config jest.config.js --coverage",
-    "test:math": "jest --config jest.config.js math"
+    "test:tree": "jest --silent=false --config jest.config.js tree"
   },
   "keywords": [],
   "author": "",
