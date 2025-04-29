@@ -13,6 +13,7 @@
     "format:check": "prettier --check \"src/**/*.{js,ts,json}\"",
     "lesson-1": "npm run build && node dist/lessons/lesson-1.js",
     "lesson-4": "npm run build && INPUT_FILE=data/lesson-4-text OUTPUT_FILE=dist/data/lesson-4-output node dist/lessons/lesson-4.js",
+    "lesson-5": "npm run test:coverage",
     "test": "jest --config jest.config.js",
     "test:watch": "jest --config jest.config.js --watch",
     "test:coverage": "jest --config jest.config.js --coverage",

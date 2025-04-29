@@ -9,13 +9,9 @@ describe('tree utility', () => {
     let consoleOutput: string[] = []
     let tempDir: string
 
-    beforeEach(async () => {
-        // Create temp directory for tests
-        tempDir = await mkdtemp(join(tmpdir(), 'tree-test-'))
+    let fsHelper: FsHelper
 
-        // Clear output array
-        consoleOutput = []
-
+    beforeAll(async () => {
         // Mock console.log to capture output
         consoleLogMock = jest.spyOn(console, 'log').mockImplementation((message, ...args) => {
             if (args.length && typeof message === 'string' && message.includes('%s')) {
@@ -27,15 +23,34 @@ describe('tree utility', () => {
         })
     })
 
+    // prepare test environment before each test
+    beforeEach(async () => {
+        // Create temp directory for tests
+        tempDir = await mkdtemp(join(tmpdir(), 'tree-test-'))
+        fsHelper = new FsHelper(tempDir)
+
+        // Clear output array
+        consoleOutput = []
+    })
+
     afterEach(async () => {
-        // Clean up
-        consoleLogMock.mockRestore()
+        // Clean up temp directory after each test
         await rm(tempDir, { recursive: true, force: true })
     })
 
-    test('should correctly display a simple directory structure', async () => {
+    afterAll(async () => {
+        // Clean up
+        consoleLogMock.mockRestore()
+    })
+
+    test('correctly display a simple directory structure', async () => {
         // Create test structure
-        const { file1Name, file2Name, folder1Name, nestedFileName } = await createSimpleFodersStructure()
+        const {
+            file1Name,
+            file2Name,
+            folder1Name,
+            nestedFileName,
+        } = await fsHelper.createSimpleFodersStructure()
 
         // Run tree on our temp directory
         await tree({ path: tempDir })
@@ -54,9 +69,15 @@ describe('tree utility', () => {
         expect(consoleOutput).toContain('  Total files: 3  ')
     })
 
-    test('should respect maxDepth parameter', async () => {
+    test('consider maxDepth parameter used in tree function', async () => {
         // Create test structure with nested folders
-        const { file1Name, folder1Name, nestedFileName, nestedFolderName, deeplyNestedFileName } = await createNestedFoldersStructure()
+        const {
+            file1Name,
+            folder1Name,
+            nestedFileName,
+            nestedFolderName,
+            deeplyNestedFileName,
+        } = await fsHelper.createNestedFoldersStructure()
 
         // Run tree with maxDepth=1
         await tree({ path: tempDir, maxDepth: 1 })
@@ -80,9 +101,9 @@ describe('tree utility', () => {
         expect(consoleOutput).toContain('  Total files: 1  ')
     })
 
-    test('should handle a single file', async () => {
+    test('correctly display stats for a single file', async () => {
         // Create a single file
-        const { filePath } = await createSingleFile()
+        const { filePath } = await fsHelper.createSingleFile()
 
         // Run tree on the file directly
         await tree({ path: filePath })
@@ -92,20 +113,25 @@ describe('tree utility', () => {
         expect(consoleOutput).toContain('  Total files: 1  ')
     })
 
-    test('should throw error when path is not provided', async () => {
+    test('throw an error when path is not provided', async () => {
         await expect(tree({ path: '' }))
             .rejects
             .toThrow('Path is required')
     })
 
-    test('should handle CLI parameters correctly', async () => {
+    test('handle CLI parameters', async () => {
         // Mock process.argv
         const originalArgv = process.argv
         process.argv = ['node', 'script.js', tempDir, '-d', '2']
 
         try {
             // Create test structure
-            const { file1Name, folder1Name, nestedFolderName, deeplyNestedFileName } = await createDeeplyNestedFoldersStructure()
+            const {
+                file1Name,
+                folder1Name,
+                nestedFolderName,
+                deeplyNestedFileName,
+            } = await fsHelper.createDeeplyNestedFoldersStructure()
 
             await tree({ path: tempDir, maxDepth: 2 }) // Use explicit params instead of CLI
 
@@ -121,9 +147,13 @@ describe('tree utility', () => {
         }
     })
 
-    test('should handle environment variables correctly', async () => {
+    test('handle environment variables', async () => {
         // Create test structure first
-        const { file1Name, folder1Name, nestedFileName } = await createSimpleFodersStructure()
+        const {
+            file1Name,
+            folder1Name,
+            nestedFileName,
+        } = await fsHelper.createSimpleFodersStructure()
 
         // Mock environment variables
         const originalEnv = { ...process.env }
@@ -144,9 +174,9 @@ describe('tree utility', () => {
         }
     })
 
-    test('should handle invalid environment max depth', async () => {
+    test('handle incorrect value of environment max depth parameter', async () => {
         // Create a simple file structure first
-        const { fileName } = await createSingleFile()
+        const { fileName } = await fsHelper.createSingleFile()
 
         // Mock environment variables
         const originalEnv = { ...process.env }
@@ -165,7 +195,8 @@ describe('tree utility', () => {
         }
     })
 
-    test.skip('should throw error for invalid path', async () => {
+    // TODO: need to find out why rejects ignored (looks like problem with async nature of fs access in tree function)
+    test.skip('throw an error for an invalid path', async () => {
         // Create and immediately delete a file to ensure we have an invalid path
         const invalidPath = join(tempDir, 'temp-file')
         await writeFile(invalidPath, 'content')
@@ -176,13 +207,17 @@ describe('tree utility', () => {
             .toThrow('Path is not valid')
     })
 
-    test('should handle CLI parameters with --depth flag', async () => {
+    test('handle CLI parameters with --depth flag', async () => {
         // Mock process.argv
         const originalArgv = process.argv
         process.argv = ['node', 'script.js', tempDir, '--depth', '1']
 
         // Create test structure
-        const { file1Name, folder1Name, nestedFileName } = await createSimpleFodersStructure()
+        const {
+            file1Name,
+            folder1Name,
+            nestedFileName,
+        } = await fsHelper.createSimpleFodersStructure()
 
         try {
             await tree() // This will use CLI params
@@ -196,13 +231,13 @@ describe('tree utility', () => {
         }
     })
 
-    test('should use default depth when no CLI depth is provided', async () => {
+    test('use default depth when no CLI depth is provided', async () => {
         // Mock process.argv
         const originalArgv = process.argv
         process.argv = ['node', 'script.js', tempDir]
 
         // Create test structure
-        const { fileName } = await createSingleFile()
+        const { fileName } = await fsHelper.createSingleFile()
 
         try {
             await tree() // This will use CLI params without depth
@@ -214,7 +249,7 @@ describe('tree utility', () => {
         }
     })
 
-    test('should handle missing CLI path parameter', async () => {
+    test('handle missing CLI path parameter', async () => {
         // Mock process.argv with no path
         const originalArgv = process.argv
         process.argv = ['node', 'script.js']
@@ -228,25 +263,29 @@ describe('tree utility', () => {
             process.argv = originalArgv
         }
     })
+})
+
+class FsHelper {
+    constructor(private tempDir: string) {}
 
     // Helpers to create test structures
-    async function createSingleFile() {
+    async createSingleFile() {
         const fileName = 'single-file.txt'
-        const filePath = join(tempDir, fileName)
+        const filePath = join(this.tempDir, fileName)
         await writeFile(filePath, 'file content')
 
         return { fileName, filePath }
     }
 
-    async function createSimpleFodersStructure() {
+    async createSimpleFodersStructure() {
         const file1Name = 'file1.txt'
         const file2Name = 'file2.txt'
         const folder1Name = 'folder1'
         const nestedFileName = 'nested-file.txt'
 
-        const file1Path = join(tempDir, file1Name)
-        const file2Path = join(tempDir, file2Name)
-        const folderPath = join(tempDir, folder1Name)
+        const file1Path = join(this.tempDir, file1Name)
+        const file2Path = join(this.tempDir, file2Name)
+        const folderPath = join(this.tempDir, folder1Name)
         const nestedFilePath = join(folderPath, nestedFileName)
 
         await writeFile(file1Path, 'file1 content')
@@ -262,15 +301,15 @@ describe('tree utility', () => {
         }
     }
 
-    async function createNestedFoldersStructure() {
+    async createNestedFoldersStructure() {
         const file1Name = 'file1.txt'
         const folder1Name = 'folder1'
         const nestedFileName = 'nested-file.txt'
         const nestedFolderName = 'nested-folder'
         const deeplyNestedFileName = 'deeply-nested.txt'
 
-        const file1Path = join(tempDir, file1Name)
-        const folderPath = join(tempDir, folder1Name)
+        const file1Path = join(this.tempDir, file1Name)
+        const folderPath = join(this.tempDir, folder1Name)
         const nestedFilePath = join(folderPath, nestedFileName)
         const nestedFolderPath = join(folderPath, nestedFolderName)
         const deeplyNestedFilePath = join(nestedFolderPath, deeplyNestedFileName)
@@ -290,14 +329,14 @@ describe('tree utility', () => {
         }
     }
 
-    async function createDeeplyNestedFoldersStructure() {
+    async createDeeplyNestedFoldersStructure() {
         const file1Name = 'file1.txt'
         const folder1Name = 'folder1'
         const nestedFolderName = 'nested-folder'
         const deeplyNestedFileName = 'deep.txt'
 
-        const file1Path = join(tempDir, file1Name)
-        const folderPath = join(tempDir, folder1Name)
+        const file1Path = join(this.tempDir, file1Name)
+        const folderPath = join(this.tempDir, folder1Name)
         const nestedFolderPath = join(folderPath, nestedFolderName)
         const deeplyNestedFilePath = join(nestedFolderPath, deeplyNestedFileName)
 
@@ -313,4 +352,7 @@ describe('tree utility', () => {
             deeplyNestedFileName,
         }
     }
-})
+}
+
+
+
