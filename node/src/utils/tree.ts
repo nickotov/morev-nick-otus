@@ -20,10 +20,11 @@ export const tree = async (params: TreeParams = getTreeParams()) => {
     let directories = 0
     let files = 0
 
-    fs.access(path, fs.constants.F_OK)
-    .catch(() => {
+    try {
+        fs.access(path, fs.constants.F_OK)
+    } catch (error) {
         throw new Error('Path is not valid')
-    })
+    }
 
     if (await checkIsChild(path)) {
         files = 1
@@ -126,8 +127,12 @@ async function checkIsParent(path: string) {
 }
 
 async function checkIsChild(path: string) {
-    const stats = await fs.stat(path)
-    return stats.isFile()
+    try {
+        const stats = await fs.stat(path)
+        return stats.isFile()
+    } catch (error) {
+        throw new Error('Path is not valid')
+    }
 }
 
 function printLine({ text, depth, prefixes }: { text: string, depth: number, prefixes: string[] }) {
