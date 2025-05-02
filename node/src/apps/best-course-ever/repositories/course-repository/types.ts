@@ -1,4 +1,4 @@
-import type { Result, ExtraContent } from "../types"
+import type { Result, ExtraContent } from '../types'
 
 export interface ICourseRepository {
     createCourse(data: Pick<Course, 'title' | 'description'>): Promise<Result<Course>>
@@ -23,4 +23,3 @@ export interface Course {
     level: CourseLevel
     extraContent: ExtraContent[]
 }
-

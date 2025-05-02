@@ -18,7 +18,10 @@ export class LessonRepository implements ILessonRepository {
         throw new Error('Not implemented')
     }
 
-    async createComment(lessonId: string, data: Pick<Comment, 'text' | 'authorId'>): Promise<Result<Comment>> {
+    async createComment(
+        lessonId: string,
+        data: Pick<Comment, 'text' | 'authorId'>
+    ): Promise<Result<Comment>> {
         throw new Error('Not implemented')
     }
 
@@ -30,7 +33,11 @@ export class LessonRepository implements ILessonRepository {
         throw new Error('Not implemented')
     }
 
-    async updateComment(lessonId: string, commentId: string, data: Partial<Comment>): Promise<Result<Comment>> {
+    async updateComment(
+        lessonId: string,
+        commentId: string,
+        data: Partial<Comment>
+    ): Promise<Result<Comment>> {
         throw new Error('Not implemented')
     }
 

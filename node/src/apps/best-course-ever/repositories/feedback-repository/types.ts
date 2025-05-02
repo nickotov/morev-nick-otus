@@ -1,4 +1,4 @@
-import { Result } from "../types"
+import { Result } from '../types'
 
 export interface IFeedbackRepository {
     createFeedback(data: Omit<Feedback, '_id'>): Promise<Result<Feedback>>

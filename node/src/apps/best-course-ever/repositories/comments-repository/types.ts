@@ -1,4 +1,4 @@
-import { Result } from "../types"
+import { Result } from '../types'
 
 export interface ICommentsRepository {
     createComment(data: Omit<Comment, '_id'>): Promise<Result<Comment>>

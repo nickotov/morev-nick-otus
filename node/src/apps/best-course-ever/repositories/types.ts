@@ -9,4 +9,3 @@ export interface ExtraContent {
     title: string
     description?: string
 }
-

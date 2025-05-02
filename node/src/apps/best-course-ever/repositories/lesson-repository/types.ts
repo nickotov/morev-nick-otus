@@ -1,5 +1,4 @@
-import type { Result, ExtraContent } from "../types"
-
+import type { Result, ExtraContent } from '../types'
 
 export interface ILessonRepository {
     createLesson(data: Pick<Lesson, 'title' | 'description'>): Promise<Result<Lesson>>
