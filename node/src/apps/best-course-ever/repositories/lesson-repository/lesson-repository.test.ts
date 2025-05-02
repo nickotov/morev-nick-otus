@@ -11,32 +11,47 @@ describe('LessonRepository', () => {
     })
 
     describe('createLesson', () => {
-        test('should throw not implemented error', async () => {
+        test('should create and return a new lesson', async () => {
             // Arrange
             const lessonData = {
                 title: 'Introduction to Node.js',
                 description: 'Learn the basics of Node.js'
             }
 
-            // Act & Assert
-            await expect(lessonRepository.createLesson(lessonData)).rejects.toThrow(
-                'Not implemented'
-            )
+            // Act
+            const result = await lessonRepository.createLesson(lessonData)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBeDefined()
+            expect(result.data.title).toBe(lessonData.title)
+            expect(result.data.description).toBe(lessonData.description)
+            expect(result.data.courseId).toBeDefined()
+            expect(Array.isArray(result.data.extraContent)).toBe(true)
+            expect(Array.isArray(result.data.comments)).toBe(true)
+            expect(Array.isArray(result.data.feedbacks)).toBe(true)
+            expect(result.data.video).toBeDefined()
         })
     })
 
     describe('getLesson', () => {
-        test('should throw not implemented error', async () => {
+        test('should return a lesson by ID', async () => {
             // Arrange
             const lessonId = 'lesson123'
 
-            // Act & Assert
-            await expect(lessonRepository.getLesson(lessonId)).rejects.toThrow('Not implemented')
+            // Act
+            const result = await lessonRepository.getLesson(lessonId)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBe(lessonId)
         })
     })
 
     describe('updateLesson', () => {
-        test('should throw not implemented error', async () => {
+        test('should update and return the updated lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
             const updateData: Partial<Lesson> = {
@@ -44,25 +59,35 @@ describe('LessonRepository', () => {
                 description: 'Updated lesson description'
             }
 
-            // Act & Assert
-            await expect(lessonRepository.updateLesson(lessonId, updateData)).rejects.toThrow(
-                'Not implemented'
-            )
+            // Act
+            const result = await lessonRepository.updateLesson(lessonId, updateData)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBe(lessonId)
+            expect(result.data.title).toBe(updateData.title)
+            expect(result.data.description).toBe(updateData.description)
         })
     })
 
     describe('deleteLesson', () => {
-        test('should throw not implemented error', async () => {
+        test('should delete and return the deleted lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
 
-            // Act & Assert
-            await expect(lessonRepository.deleteLesson(lessonId)).rejects.toThrow('Not implemented')
+            // Act
+            const result = await lessonRepository.deleteLesson(lessonId)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBe(lessonId)
         })
     })
 
     describe('createComment', () => {
-        test('should throw not implemented error', async () => {
+        test('should create and return a new comment for a lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
             const commentData = {
@@ -70,38 +95,50 @@ describe('LessonRepository', () => {
                 authorId: 'author456'
             }
 
-            // Act & Assert
-            await expect(lessonRepository.createComment(lessonId, commentData)).rejects.toThrow(
-                'Not implemented'
-            )
+            // Act
+            const result = await lessonRepository.createComment(lessonId, commentData)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBeDefined()
+            expect(result.data.text).toBe(commentData.text)
+            expect(result.data.authorId).toBe(commentData.authorId)
         })
     })
 
     describe('getComments', () => {
-        test('should throw not implemented error', async () => {
+        test('should return all comments for a lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
 
-            // Act & Assert
-            await expect(lessonRepository.getComments(lessonId)).rejects.toThrow('Not implemented')
+            // Act
+            const result = await lessonRepository.getComments(lessonId)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(Array.isArray(result.data)).toBe(true)
         })
     })
 
     describe('getComment', () => {
-        test('should throw not implemented error', async () => {
+        test('should return a specific comment for a lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
             const commentId = 'comment456'
 
-            // Act & Assert
-            await expect(lessonRepository.getComment(lessonId, commentId)).rejects.toThrow(
-                'Not implemented'
-            )
+            // Act
+            const result = await lessonRepository.getComment(lessonId, commentId)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBe(commentId)
         })
     })
 
     describe('updateComment', () => {
-        test('should throw not implemented error', async () => {
+        test('should update and return the updated comment for a lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
             const commentId = 'comment456'
@@ -109,23 +146,30 @@ describe('LessonRepository', () => {
                 text: 'Updated comment text'
             }
 
-            // Act & Assert
-            await expect(
-                lessonRepository.updateComment(lessonId, commentId, updateData)
-            ).rejects.toThrow('Not implemented')
+            // Act
+            const result = await lessonRepository.updateComment(lessonId, commentId, updateData)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBe(commentId)
+            expect(result.data.text).toBe(updateData.text)
         })
     })
 
     describe('deleteComment', () => {
-        test('should throw not implemented error', async () => {
+        test('should delete and return the deleted comment for a lesson', async () => {
             // Arrange
             const lessonId = 'lesson123'
             const commentId = 'comment456'
 
-            // Act & Assert
-            await expect(lessonRepository.deleteComment(lessonId, commentId)).rejects.toThrow(
-                'Not implemented'
-            )
+            // Act
+            const result = await lessonRepository.deleteComment(lessonId, commentId)
+
+            // Assert
+            expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            expect(result.data._id).toBe(commentId)
         })
     })
 })
