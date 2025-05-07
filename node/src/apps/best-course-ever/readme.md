@@ -34,3 +34,16 @@ The application MUST:
 
 - use rest api
 - use Controller Service Repository (CSR) pattern
+
+## What app is
+
+This app has two parts - backend and frontend.
+Frontend will be written using React and it will be a SPA.
+For a backend I will use express for a server part.
+For an api I plan to stick with REST, though later it would be nice to switch to graphql for more flexibility considering
+the specificity of app (for example page with all course needs few fields from backened and a page for a concrete course need more data).
+For data storage i'll try mongodb with mongouse as ORM and for a more clear data definition via code.
+I'll stick with Controller-Service-Repository pattern.
+For authentication i'll probably use Passport.js.
+
+For now entities (kind of) described in `types.ts` files in repositories directories and dummy classes for repositories created there as well.
