@@ -17,7 +17,10 @@
     "test": "jest --config jest.config.js",
     "test:watch": "jest --config jest.config.js --watch",
     "test:coverage": "jest --config jest.config.js --coverage",
-    "test:tree": "jest --silent=false --config jest.config.js tree"
+    "test:tree": "jest --silent=false --config jest.config.js tree",
+    "docker:up": "docker compose -f src/apps/best-course-ever/docker-compose.yml up -d",
+    "docker:down": "docker compose -f src/apps/best-course-ever/docker-compose.yml down",
+    "docker:restart": "docker compose -f src/apps/best-course-ever/docker-compose.yml restart"
   },
   "keywords": [],
   "author": "",
