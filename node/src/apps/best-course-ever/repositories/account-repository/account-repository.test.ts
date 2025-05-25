@@ -24,6 +24,9 @@ describe('AccountRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Account data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.userId).toBe(accountData.userId)
             expect(result.data.type).toBe(accountData.type)
@@ -42,6 +45,9 @@ describe('AccountRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Account data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.userId).toBe(accountData.userId)
             expect(result.data.type).toBe(accountData.type)
@@ -60,6 +66,9 @@ describe('AccountRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Account data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.userId).toBe(accountData.userId)
             expect(result.data.type).toBe(accountData.type)

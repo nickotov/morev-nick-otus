@@ -26,6 +26,9 @@ describe('CommentsRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.courseId).toBe(commentData.courseId)
             expect(result.data.lessonId).toBe(commentData.lessonId)
@@ -44,6 +47,10 @@ describe('CommentsRepository', () => {
 
             // Assert
             expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comments data is null')
+            }
             expect(Array.isArray(result.data)).toBe(true)
             if (result.data.length > 0) {
                 result.data.forEach((comment) => {
@@ -62,6 +69,10 @@ describe('CommentsRepository', () => {
 
             // Assert
             expect(result.error).toBeNull()
+            expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comments data is null')
+            }
             expect(Array.isArray(result.data)).toBe(true)
             if (result.data.length > 0) {
                 result.data.forEach((comment) => {
@@ -83,6 +94,9 @@ describe('CommentsRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBe(commentId)
         })
     })
@@ -101,6 +115,9 @@ describe('CommentsRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBe(commentId)
             expect(result.data.text).toBe(updateData.text)
         })
@@ -117,6 +134,9 @@ describe('CommentsRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBe(commentId)
         })
     })

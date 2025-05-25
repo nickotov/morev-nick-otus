@@ -24,6 +24,9 @@ describe('CourseRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Course data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.title).toBe(courseData.title)
             expect(result.data.description).toBe(courseData.description)
@@ -47,6 +50,9 @@ describe('CourseRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Course data is null')
+            }
             expect(result.data._id).toBe(courseId)
         })
     })
@@ -67,6 +73,9 @@ describe('CourseRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Course data is null')
+            }
             expect(result.data._id).toBe(courseId)
             expect(result.data.title).toBe(updateData.title)
             expect(result.data.description).toBe(updateData.description)
@@ -85,6 +94,9 @@ describe('CourseRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Course data is null')
+            }
             expect(result.data._id).toBe(courseId)
         })
     })

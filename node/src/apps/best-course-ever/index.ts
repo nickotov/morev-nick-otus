@@ -2,7 +2,7 @@ import express from 'express'
 import { config } from './config'
 import { log } from '@/utils/logger'
 import { MongoDbClient } from './db'
-
+import { registerRoutes } from './routes'
 
 void (async () => {
     const app = express()
@@ -10,6 +10,8 @@ void (async () => {
     app.get('/', (req, res) => {
         res.send('Hello World')
     })
+
+    registerRoutes(app)
 
     await MongoDbClient.getInstance().connect()
 

@@ -24,6 +24,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Lesson data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.title).toBe(lessonData.title)
             expect(result.data.description).toBe(lessonData.description)
@@ -46,6 +49,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Lesson data is null')
+            }
             expect(result.data._id).toBe(lessonId)
         })
     })
@@ -65,6 +71,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Lesson data is null')
+            }
             expect(result.data._id).toBe(lessonId)
             expect(result.data.title).toBe(updateData.title)
             expect(result.data.description).toBe(updateData.description)
@@ -82,6 +91,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Lesson data is null')
+            }
             expect(result.data._id).toBe(lessonId)
         })
     })
@@ -101,6 +113,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.text).toBe(commentData.text)
             expect(result.data.authorId).toBe(commentData.authorId)
@@ -133,6 +148,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBe(commentId)
         })
     })
@@ -152,6 +170,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBe(commentId)
             expect(result.data.text).toBe(updateData.text)
         })
@@ -169,6 +190,9 @@ describe('LessonRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Comment data is null')
+            }
             expect(result.data._id).toBe(commentId)
         })
     })

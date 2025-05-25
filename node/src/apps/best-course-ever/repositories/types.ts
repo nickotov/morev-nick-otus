@@ -1,5 +1,5 @@
 export interface Result<T> {
-    data: T
+    data: T | null
     error: string | null
 }
 

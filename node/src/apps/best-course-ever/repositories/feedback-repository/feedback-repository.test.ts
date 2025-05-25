@@ -25,6 +25,9 @@ describe('FeedbackRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Feedback data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.authorId).toBe(feedbackData.authorId)
             expect(result.data.text).toBe(feedbackData.text)
@@ -43,6 +46,9 @@ describe('FeedbackRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(Array.isArray(result.data)).toBe(true)
+            if (!result.data) {
+                throw new Error('Feedbacks data is null')
+            }
         })
 
         test('should return feedbacks for a specific lesson', async () => {
@@ -56,6 +62,9 @@ describe('FeedbackRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(Array.isArray(result.data)).toBe(true)
+            if (!result.data) {
+                throw new Error('Feedbacks data is null')
+            }
             // All feedbacks should be for the specified lesson
             if (result.data.length > 0) {
                 result.data.forEach((feedback) => {
@@ -76,6 +85,9 @@ describe('FeedbackRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Feedback data is null')
+            }
             expect(result.data._id).toBe(feedbackId)
         })
     })
@@ -95,6 +107,9 @@ describe('FeedbackRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Feedback data is null')
+            }
             expect(result.data._id).toBe(feedbackId)
             expect(result.data.text).toBe(updateData.text)
             expect(result.data.rating).toBe(updateData.rating)
@@ -112,6 +127,9 @@ describe('FeedbackRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('Feedback data is null')
+            }
             expect(result.data._id).toBe(feedbackId)
         })
     })

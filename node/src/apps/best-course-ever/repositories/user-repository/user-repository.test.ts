@@ -24,6 +24,9 @@ describe('UserRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('User data is null')
+            }
             expect(result.data._id).toBeDefined()
             expect(result.data.email).toBe(userData.email)
             expect(result.data.password).toBe(userData.password)
@@ -45,6 +48,9 @@ describe('UserRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('User data is null')
+            }
             expect(result.data._id).toBe(userId)
         })
     })
@@ -64,6 +70,9 @@ describe('UserRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('User data is null')
+            }
             expect(result.data._id).toBe(userData._id)
             expect(result.data.email).toBe(userData.email)
             expect(result.data.isVerified).toBe(userData.isVerified)
@@ -81,6 +90,9 @@ describe('UserRepository', () => {
             // Assert
             expect(result.error).toBeNull()
             expect(result.data).toBeDefined()
+            if (!result.data) {
+                throw new Error('User data is null')
+            }
             expect(result.data._id).toBe(userId)
             expect(result.data.isDeleted).toBe(true)
         })
