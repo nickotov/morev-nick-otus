@@ -4,14 +4,15 @@ import { log } from '@/utils/logger'
 import { MongoDbClient } from './db'
 import { registerRoutes } from './routes'
 
-void (async () => {
+export const startApp = async () => {
     const app = express()
 
     app.get('/', (req, res) => {
-        res.send('Hello World')
+        res.send('Hello World!!!')
     })
 
     registerRoutes(app)
+
 
     await MongoDbClient.getInstance().connect()
 
@@ -38,4 +39,4 @@ void (async () => {
     // Listen for termination signals
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
-})()
+}

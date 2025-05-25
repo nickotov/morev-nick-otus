@@ -1,14 +1,12 @@
-import { Db, MongoClient } from 'mongodb'
+import mongoose from 'mongoose'
 import { config } from '@/apps/best-course-ever/config'
 
 export class DatabaseClient {
     private static instance: DatabaseClient
-    private client: MongoClient
-    public db: Db
+    private client: mongoose.Mongoose
 
     private constructor() {
-        this.client = new MongoClient(config.mongodb.uri)
-        this.db = this.client.db(config.mongodb.db)
+        this.client = mongoose
     }
 
     static getInstance() {
@@ -19,10 +17,10 @@ export class DatabaseClient {
     }
 
     public async connect() {
-        await this.client.connect()
+        await this.client.connect(`${config.mongodb.uri}/${config.mongodb.db}`)
     }
 
     public async disconnect() {
-        await this.client.close()
+        await this.client.disconnect()
     }
 }

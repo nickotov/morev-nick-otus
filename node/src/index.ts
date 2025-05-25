@@ -1,1 +1,5 @@
-import '@/apps/best-course-ever'
+import './addAliasesSuport'
+
+import { startApp } from '@/apps/best-course-ever'
+
+startApp()
