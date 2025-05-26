@@ -4,8 +4,11 @@ import { log } from '@/utils/logger'
 import { MongoDbClient } from './db'
 import { registerRoutes } from './routes'
 
-export const startApp = async () => {
+void (async () => {
     const app = express()
+
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
 
     app.get('/', (req, res) => {
         res.send('Hello World!!!')
@@ -39,4 +42,4 @@ export const startApp = async () => {
     // Listen for termination signals
     process.on('SIGTERM', shutdown)
     process.on('SIGINT', shutdown)
-}
+})()

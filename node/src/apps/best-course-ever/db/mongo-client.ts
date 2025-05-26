@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { config } from '@/apps/best-course-ever/config'
+import { config } from '@app/config'
 
 export class DatabaseClient {
     private static instance: DatabaseClient
