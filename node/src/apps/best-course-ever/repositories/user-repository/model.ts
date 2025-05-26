@@ -19,7 +19,6 @@ const userSchema = new Schema<User>({
         type: String,
         required: true,
         select: false,
-        minlength: 8,
         validate: {
             validator: passwordValidation.validate,
             message: passwordValidation.message

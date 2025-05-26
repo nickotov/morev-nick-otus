@@ -1,9 +1,10 @@
+const MIN_PASSWORD_LENGTH = 8
+
 export const passwordValidation = {
-    minLength: 8,
-    validate(value: string) {
-        return value.trim().length >= this.minLength
+    validate: (value: string) => {
+        return value.trim().length >= MIN_PASSWORD_LENGTH
     },
-    message() {
-        return `Password must be at least ${this.minLength} characters long`
+    message: () => {
+        return `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`
     }
 }

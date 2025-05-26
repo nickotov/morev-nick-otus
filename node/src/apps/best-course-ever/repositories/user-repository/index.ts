@@ -1,14 +1,37 @@
+import mongoose from 'mongoose'
 import type { IUserRepository, User } from './types'
 import { UserModel } from './model'
 import type { Result } from '../types'
 
+
 export class UserRepository implements IUserRepository {
     async createUser(data: Pick<User, 'email' | 'password'>): Promise<Result<User>> {
-        const user = await UserModel.create(data)
+        try {
+            const user = await UserModel.create(data)
 
-        return {
-            data: user,
-            error: null
+            return {
+                data: user,
+                error: null
+            }
+        } catch (error) {
+            const errors: string[] = []
+
+            if (error instanceof mongoose.Error.ValidationError) {
+                if (error.errors.password) {
+                    errors.push(error.errors.password.message)
+                }
+
+                if (error.errors.email) {
+                    errors.push(error.errors.email.message)
+                }
+            } else {
+                errors.push('Invalid data')
+            }
+
+            return {
+                data: null,
+                error: errors.join('\n')
+            }
         }
     }
 
@@ -22,6 +45,13 @@ export class UserRepository implements IUserRepository {
     }
 
     async getUser(id: string): Promise<Result<User>> {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return {
+                data: null,
+                error: 'Invalid user id'
+            }
+        }
+
         const user = await UserModel.findById(id)
 
         let error: string | null = null
@@ -36,8 +66,8 @@ export class UserRepository implements IUserRepository {
         }
     }
 
-    async updateUser(user: Partial<User> & { _id: string }): Promise<Result<User>> {
-        const updatedUser = await UserModel.findByIdAndUpdate(user._id, user, { new: true })
+    async updateUser(id: string, user: Partial<User>): Promise<Result<User>> {
+        const updatedUser = await UserModel.findByIdAndUpdate(id, user, { new: true })
 
         let error: string | null = null
 
