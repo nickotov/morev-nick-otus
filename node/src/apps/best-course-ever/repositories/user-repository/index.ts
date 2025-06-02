@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import type { IUserRepository, User } from './types'
+import type { IUserRepository, User, UserQuery } from './types'
 import { UserModel } from './model'
 import type { Result } from '../types'
 
@@ -35,8 +35,11 @@ export class UserRepository implements IUserRepository {
         }
     }
 
-    async getUsers(): Promise<Result<User[]>> {
+    async getUsers({ page = 0, limit = 10 }: UserQuery = {}): Promise<Result<User[]>> {
         const users = await UserModel.find()
+            .skip(page * limit)
+            .limit(limit)
+            .exec()
 
         return {
             data: users,

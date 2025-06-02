@@ -13,8 +13,13 @@ export interface User {
 
 export interface IUserRepository {
     createUser(data: Pick<User, 'email' | 'password'>): Promise<Result<User>>
-    getUsers(): Promise<Result<User[]>>
+    getUsers(query?: UserQuery): Promise<Result<User[]>>
     getUser(id: string): Promise<Result<User>>
     updateUser(id: string, user: Partial<User>): Promise<Result<User>>
     deleteUser(id: string): Promise<Result<User>>
+}
+
+export interface UserQuery {
+    page?: number
+    limit?: number
 }
