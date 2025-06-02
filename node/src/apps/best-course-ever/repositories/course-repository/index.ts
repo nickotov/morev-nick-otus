@@ -3,7 +3,7 @@ import { CourseModel } from './model'
 import { Result } from '../types'
 
 export class CourseRepository implements ICourseRepository {
-    async createCourse(data: Pick<Course, 'title' | 'description'>): Promise<Result<Course>> {
+    async createCourse(data: Course): Promise<Result<Course>> {
         const course = await CourseModel.create(data)
 
         return {
@@ -15,7 +15,13 @@ export class CourseRepository implements ICourseRepository {
     async getCourses(query: CourseQuery): Promise<Result<Course[]>> {
         const { authorId, page = 0, limit = 10 } = query
 
-        const courses = await CourseModel.find({ authorId })
+        const requestQuery: Partial<Course> = {}
+
+        if (authorId) {
+            requestQuery.authorId = authorId
+        }
+
+        const courses = await CourseModel.find(requestQuery)
             .skip(page * limit)
             .limit(limit)
             .exec()

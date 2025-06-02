@@ -39,7 +39,7 @@ const CourseSchema = new Schema<Course>({
     },
     tags: {
         type: [String],
-        required: true
+        default: []
     },
 })
 
