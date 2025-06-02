@@ -1,4 +1,4 @@
-import type { IAccountRepository, Account } from './types'
+import type { IAccountRepository, Account, AccountQuery } from './types'
 import { AccountModel } from './model'
 import { UserRepository } from '../user-repository'
 import { Result } from '../types'
@@ -63,8 +63,11 @@ export class AccountRepository implements IAccountRepository {
         }
     }
 
-    async getAccounts(): Promise<Result<Account[]>> {
+    async getAccounts({ page = 0, limit = 10 }: AccountQuery = {}): Promise<Result<Account[]>> {
         const accounts = await AccountModel.find()
+            .skip(page * limit)
+            .limit(limit)
+            .exec()
 
         return {
             data: accounts,

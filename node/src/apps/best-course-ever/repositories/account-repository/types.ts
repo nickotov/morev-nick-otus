@@ -11,6 +11,11 @@ export interface Account {
 export interface IAccountRepository {
     createAccount(data: Pick<Account, 'userId' | 'type'>): Promise<Result<Account>>
     getAccount(id: string): Promise<Result<Account>>
-    getAccounts(): Promise<Result<Account[]>>
+    getAccounts(query?: AccountQuery): Promise<Result<Account[]>>
     deleteAccount(id: string): Promise<Result<Account>>
+}
+
+export interface AccountQuery {
+    page?: number
+    limit?: number
 }
