@@ -3,6 +3,7 @@ import type { Result, ExtraContent } from '../types'
 export interface ICourseRepository {
     createCourse(data: Pick<Course, 'title' | 'description'>): Promise<Result<Course>>
     getCourse(id: string): Promise<Result<Course>>
+    getCourses(query: CourseQuery): Promise<Result<Course[]>>
     updateCourse(id: string, data: Partial<Course>): Promise<Result<Course>>
     deleteCourse(id: string): Promise<Result<Course>>
 }
@@ -22,4 +23,10 @@ export interface Course {
     tags: Tag[]
     level: CourseLevel
     extraContent: ExtraContent[]
+}
+
+export interface CourseQuery {
+    authorId?: string
+    page?: number
+    limit?: number
 }

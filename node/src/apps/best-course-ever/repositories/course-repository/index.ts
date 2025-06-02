@@ -1,20 +1,10 @@
-import type { ICourseRepository, Course } from './types'
+import type { ICourseRepository, Course, CourseQuery } from './types'
+import { CourseModel } from './model'
 import { Result } from '../types'
 
 export class CourseRepository implements ICourseRepository {
     async createCourse(data: Pick<Course, 'title' | 'description'>): Promise<Result<Course>> {
-        // Mock implementation to pass tests
-        const course: Course = {
-            _id: Math.random().toString(36).substring(7),
-            authorId: 'default-author-id',
-            title: data.title,
-            description: data.description,
-            lessons: [],
-            feedbacks: [],
-            tags: [],
-            level: 'beginner',
-            extraContent: []
-        }
+        const course = await CourseModel.create(data)
 
         return {
             data: course,
@@ -22,18 +12,28 @@ export class CourseRepository implements ICourseRepository {
         }
     }
 
+    async getCourses(query: CourseQuery): Promise<Result<Course[]>> {
+        const { authorId, page = 0, limit = 10 } = query
+
+        const courses = await CourseModel.find({ authorId })
+            .skip(page * limit)
+            .limit(limit)
+            .exec()
+
+        return {
+            data: courses,
+            error: null
+        }
+    }
+
     async getCourse(id: string): Promise<Result<Course>> {
-        // Mock implementation to pass tests
-        const course: Course = {
-            _id: id,
-            authorId: 'default-author-id',
-            title: 'Test Course',
-            description: 'Test Description',
-            lessons: [],
-            feedbacks: [],
-            tags: [],
-            level: 'beginner',
-            extraContent: []
+        const course = await CourseModel.findById(id)
+
+        if (!course) {
+            return {
+                data: null,
+                error: 'Course not found'
+            }
         }
 
         return {
@@ -43,17 +43,13 @@ export class CourseRepository implements ICourseRepository {
     }
 
     async updateCourse(id: string, data: Partial<Course>): Promise<Result<Course>> {
-        // Mock implementation to pass tests
-        const course: Course = {
-            _id: id,
-            authorId: 'default-author-id',
-            title: data.title || 'Test Course',
-            description: data.description || 'Test Description',
-            lessons: data.lessons || [],
-            feedbacks: data.feedbacks || [],
-            tags: data.tags || [],
-            level: data.level || 'beginner',
-            extraContent: data.extraContent || []
+        const course = await CourseModel.findByIdAndUpdate(id, data, { new: true })
+
+        if (!course) {
+            return {
+                data: null,
+                error: 'Course not found'
+            }
         }
 
         return {
@@ -63,17 +59,13 @@ export class CourseRepository implements ICourseRepository {
     }
 
     async deleteCourse(id: string): Promise<Result<Course>> {
-        // Mock implementation to pass tests
-        const course: Course = {
-            _id: id,
-            authorId: 'default-author-id',
-            title: 'Deleted Course',
-            description: 'Deleted Description',
-            lessons: [],
-            feedbacks: [],
-            tags: [],
-            level: 'beginner',
-            extraContent: []
+        const course = await CourseModel.findByIdAndDelete(id)
+
+        if (!course) {
+            return {
+                data: null,
+                error: 'Course not found'
+            }
         }
 
         return {

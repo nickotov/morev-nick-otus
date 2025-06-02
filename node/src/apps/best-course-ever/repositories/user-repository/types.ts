@@ -6,6 +6,7 @@ export interface User {
     password: string
     createdAt: Date
     isDeleted: boolean
+    deletedAt: Date | null
     isBlocked: boolean
     isVerified: boolean
 }

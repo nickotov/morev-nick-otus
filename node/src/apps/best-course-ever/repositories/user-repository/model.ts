@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-import { passwordValidation } from '../../utils/validators'
+import { passwordValidation } from '@app/utils/validators'
 import isEmail from 'validator/lib/isEmail'
 import bcrypt from 'bcryptjs'
 import type { User } from './types'
@@ -34,6 +34,11 @@ const userSchema = new Schema<User>({
         default: false,
         select: false
     },
+    deletedAt: {
+        type: Date,
+        default: null,
+        select: false
+    },
     isBlocked: {
         type: Boolean,
         default: false,
@@ -52,5 +57,20 @@ userSchema.pre('save', async function (next) {
     }
     next()
 })
+
+userSchema.pre('deleteOne', async function () {
+    const user = this
+    await user.updateOne({ $set: { isDeleted: true, deletedAt: new Date() } })
+
+    return
+})
+
+userSchema.pre('deleteMany', async function () {
+    const users = this
+    await users.updateMany({ $set: { isDeleted: true, deletedAt: new Date() } })
+
+    return
+})
+
 
 export const UserModel = model('User', userSchema)
