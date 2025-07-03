@@ -43,4 +43,17 @@ const CourseSchema = new Schema<Course>({
     },
 })
 
+// Remove all feedbacks associated with this course when course is deleted
+CourseSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        try {
+            // Remove all feedbacks associated with this course
+            const { FeedbackModel } = await import('../feedback-repository/model.js')
+            await FeedbackModel.deleteMany({ courseId: doc._id.toString() })
+        } catch (error) {
+            console.error('Error removing feedbacks when course deleted:', error)
+        }
+    }
+})
+
 export const CourseModel = model('Course', CourseSchema)

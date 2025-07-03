@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose'
 import type { Lesson } from './types'
 import { CourseModel } from '../course-repository/model'
+import { FeedbackModel } from '../feedback-repository/model'
 
 const lessonSchema = new Schema<Lesson>({
     courseId: {
@@ -45,6 +46,11 @@ const lessonSchema = new Schema<Lesson>({
 })
 
 lessonSchema.pre('save', async function (next) {
+    if (!this.isNew) {
+        next()
+        return
+    }
+
     const courseId = this.courseId
     const course = await CourseModel.findById(courseId)
 
@@ -66,6 +72,9 @@ lessonSchema.post('findOneAndDelete', async function (doc, next) {
 
     course.lessons = course.lessons.filter((lesson) => lesson !== doc._id.toString())
     await course.save()
+
+    // Remove all feedbacks associated with this lesson
+    await FeedbackModel.deleteMany({ lessonId: doc._id.toString() })
 })
 
 
